@@ -34,7 +34,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: simple-java-project:latest
+        tags: alonsaban/simple-java-project:latest
         context: .
         file: ./docker/Dockerfile
 
