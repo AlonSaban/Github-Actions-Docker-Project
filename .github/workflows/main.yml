@@ -35,4 +35,5 @@ jobs:
       with:
         push: true
         tags: simple-java-project:latest
-
+		context: .
+		file: ./docker/Dockerfile
