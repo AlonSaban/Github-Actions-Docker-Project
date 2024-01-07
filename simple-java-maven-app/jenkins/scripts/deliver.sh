@@ -20,6 +20,13 @@ set -x
 VERSION=`mvn help:evaluate -Dexpression=project.version | grep "^[^\[]"`
 set +x
 
+PATCH_VERSION=$(echo $VERSION | awk -F. '{$3=$3+1; print $1"."$2"."$3}' OFS=".")
+
+echo 'Updating Maven project version to '$PATCH_VERSION
+mvn versions:set -DnewVersion=$PATCH_VERSION
+
+VERSION=$PATCH_VERSION
+
 echo 'The following command runs and outputs the execution of your Java'
 echo 'application (which Jenkins built using Maven) to the Jenkins UI.'
 set -x
