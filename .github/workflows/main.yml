@@ -29,16 +29,19 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: Get the latest version
-      id: get_version
-      run: echo "DOCKER_IMAGE_VERSION=1.0.$(( $(date +'%Y%m%d%H%M%S') + 1 ))" >> $GITHUB_ENV
+
+    - name: Get the current version from Docker Hub
+      id: get_current_version
+      run: echo "DOCKER_IMAGE_VERSION=$(docker run --rm $REGISTRY/alonsaban/simple-java-project:latest cat /version)" >> $GITHUB_ENV
+
+    - name: Increment version
+      run: echo "DOCKER_IMAGE_VERSION=$(echo $DOCKER_IMAGE_VERSION | awk -F. '{$NF+=1} 1' OFS=. )" >> $GITHUB_ENV
 
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: alonsaban/simple-java-project:1.0.0
+        tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
         context: .
         file: ./docker/Dockerfile
 
