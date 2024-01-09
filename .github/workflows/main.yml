@@ -38,7 +38,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
+        tags: alonsaban/simple-java-project:1.0.1
         context: .
         file: ./docker/Dockerfile
 
