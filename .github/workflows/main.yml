@@ -30,11 +30,16 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        tags: alonsaban/simple-java-project:latest
-        context: .
-        file: ./docker/Dockerfile
+    - name: Extract Version and Increment Patch
+      run: |
+        current_version=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
+        IFS='.' read -r major minor patch <<< "$current_version"
+        ((patch++))
+        new_version="$major.$minor.$patch"
+        echo "::set-env name=NEW_VERSION::$new_version"
+
+    - name: Build and push Docker Image
+      run: |
+        docker build -t alonsaban/simple-java-project:$NEW_VERSION -f ./docker/Dockerfile .
+        docker push alonsaban/simple-java-project:$NEW_VERSION
 
