@@ -15,12 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -32,7 +26,7 @@ jobs:
 
     - name: Get the current version from Docker Hub
       id: get_current_version
-      run: echo "DOCKER_IMAGE_VERSION=$(docker run --rm $REGISTRY/alonsaban/simple-java-project:latest cat /version)" >> $GITHUB_ENV
+      run: echo "DOCKER_IMAGE_VERSION=$(curl -s -H 'Authorization: Bearer ${{ secrets.DOCKER_PASSWORD }}' https://registry.hub.docker.com/v2/repositories/alonsaban/simple-java-project/tags/ | jq -r '.results[0].name')" >> $GITHUB_ENV
 
     - name: Increment version
       run: echo "DOCKER_IMAGE_VERSION=$(echo $DOCKER_IMAGE_VERSION | awk -F. '{$NF+=1} 1' OFS=. )" >> $GITHUB_ENV
@@ -44,3 +38,4 @@ jobs:
         tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
         context: .
         file: ./docker/Dockerfile
+
