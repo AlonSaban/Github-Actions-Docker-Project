@@ -32,7 +32,7 @@ jobs:
 
     - name: Extract Version and Increment Patch
       run: |
-        current_version=$(grep -oP '<version>\K[^<]+' pom.xml)
+        current_version=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' pom.xml)
         IFS='.' read -r major minor patch <<< "$current_version"
         ((patch++))
         new_version="$major.$minor.$patch"
