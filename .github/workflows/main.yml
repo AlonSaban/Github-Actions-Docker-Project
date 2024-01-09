@@ -36,7 +36,7 @@ jobs:
         IFS='.' read -r major minor patch <<< "$current_version"
         ((patch++))
         new_version="$major.$minor.$patch"
-	    echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+        echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
     - name: Build and push Docker Image
       run: |
