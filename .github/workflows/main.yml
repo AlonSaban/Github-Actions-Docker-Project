@@ -38,4 +38,3 @@ jobs:
         tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
         context: .
         file: ./docker/Dockerfile
-
