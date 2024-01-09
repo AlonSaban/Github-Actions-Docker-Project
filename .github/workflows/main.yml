@@ -32,7 +32,7 @@ jobs:
 
     - name: Extract Version and Increment Patch
       run: |
-        current_version=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
+        current_version=$(grep -oP '<version>\K[^<]+' pom.xml)
         IFS='.' read -r major minor patch <<< "$current_version"
         ((patch++))
         new_version="$major.$minor.$patch"
