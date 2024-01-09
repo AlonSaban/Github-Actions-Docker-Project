@@ -27,7 +27,7 @@ jobs:
     - name: Get the current version from Docker Hub
       id: get_current_version
       run: |
-      echo "DOCKER_IMAGE_VERSION=$(curl -s -H 'Authorization: Bearer ${{ secrets.DOCKER_PASSWORD }}' https://registry.hub.docker.com/v2/repositories/alonsaban/simple-java-project/tags/ | jq -r '.results[0].name')" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE_VERSION=\$(curl -s -H \"Authorization: Bearer ${{ secrets.DOCKER_PASSWORD }}\" https://registry.hub.docker.com/v2/repositories/alonsaban/simple-java-project/tags/ | jq -r '.results[0].name')" >> $GITHUB_ENV
 
     - name: Increment version
       run: echo "DOCKER_IMAGE_VERSION=$(echo $DOCKER_IMAGE_VERSION | awk -F. '{$NF+=1} 1' OFS=. )" >> $GITHUB_ENV
