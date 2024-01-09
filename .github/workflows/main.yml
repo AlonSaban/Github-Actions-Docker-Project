@@ -29,12 +29,17 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Get the latest image version
+      id: get_version
+      run: echo "::set-output name=version::$(date +'%Y%m%d%H%M%S')"
+
 
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: alonsaban/simple-java-project:latest
+        tags: alonsaban/simple-java-project:${{ steps.get_version.outputs.version }}
         context: .
         file: ./docker/Dockerfile
 
