@@ -85,35 +85,34 @@
       </plugin>
 
       <!-- Build Number Maven Plugin -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.4</version>
-        <executions>
-          <execution>
-            <id>increment-version</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-            <configuration>
-              <items>
-                <item>buildNumber</item>
-              </items>
-            </configuration>
-          </execution>
-        </executions>
-        <configuration>
-          <doCheck>true</doCheck>
-          <doUpdate>true</doUpdate>
-          <timestampFormat>MMddHHmm</timestampFormat>
-          <format>{0,number}</format>
-          <items>
-            <item>buildNumber</item>
-          </items>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>buildnumber-maven-plugin</artifactId>
+      <version>1.4</version>
+      <executions>
+        <execution>
+          <id>increment-version</id>
+          <phase>validate</phase>
+          <goals>
+            <goal>create</goal>
+          </goals>
+          <configuration>
+            <items>
+              <item>buildNumber</item>
+            </items>
+          </configuration>
+        </execution>
+      </executions>
+      <configuration>
+        <doCheck>true</doCheck>
+        <doUpdate>true</doUpdate>
+        <timestampFormat>MMddHHmm</timestampFormat>
+        <format>{0,number}</format>
+        <items>
+          <item>buildNumber</item>
+        </items>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 </project>
-
