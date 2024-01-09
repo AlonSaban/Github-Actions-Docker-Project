@@ -37,17 +37,7 @@ jobs:
         echo "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION" >> $GITHUB_ENV
 
     - name: Increment version
-      run: |
-        # Split version into major, minor, and patch components
-        IFS='.' read -r -a version_components <<< "${DOCKER_IMAGE_VERSION}"
-        
-        # Increment the patch version
-        ((version_components[2]++))
-        
-        # Join the components back into the version
-        DOCKER_IMAGE_VERSION="${version_components[0]}.${version_components[1]}.${version_components[2]}"
-        
-        echo "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" >> $GITHUB_ENV
+      run: echo "DOCKER_IMAGE_VERSION=$(echo $DOCKER_IMAGE_VERSION | awk -F. '{$NF+=1} 1' OFS=. )" >> $GITHUB_ENV
 
     - name: Build and push
       uses: docker/build-push-action@v5
@@ -56,4 +46,3 @@ jobs:
         tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
         context: .
         file: ./docker/Dockerfile
-
