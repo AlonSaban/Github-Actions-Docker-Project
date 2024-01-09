@@ -27,16 +27,16 @@ jobs:
     - name: Get the current version from Docker Hub
       id: get_current_version
       run: |
-        DOCKER_TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'"${{ secrets.DOCKER_USERNAME }}"'", "password": "'"${{ secrets.DOCKER_PASSWORD }}"'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-        DOCKER_IMAGE_VERSION=$(curl -s -H "Authorization: Bearer $DOCKER_TOKEN" https://registry.hub.docker.com/v2/repositories/alonsaban/simple-java-project/tags/ | jq -r '.results[0].name')
-        echo "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION" >> $GITHUB_ENV
+      echo "DOCKER_IMAGE_VERSION=$(curl -s -H 'Authorization: Bearer ${{ secrets.DOCKER_PASSWORD }}' https://registry.hub.docker.com/v2/repositories/alonsaban/simple-java-project/tags/ | jq -r '.results[0].name')" >> $GITHUB_ENV
 
     - name: Increment version
       run: echo "DOCKER_IMAGE_VERSION=$(echo $DOCKER_IMAGE_VERSION | awk -F. '{$NF+=1} 1' OFS=. )" >> $GITHUB_ENV
 
     - name: Build and push
-      run: |
-        docker buildx create --use
-        docker buildx inspect --bootstrap
-        docker buildx build --push --tag alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }} --file ./docker/Dockerfile .
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
+        context: .
+        file: ./docker/Dockerfile
 
