@@ -68,5 +68,5 @@ jobs:
     
     - name: Deploy to EC2 - Pull Docker Image
       run: |
-        ssh -o StrictHostKeyChecking=no -i ./private_key ubuntu@3.121.212.148 "docker pull alonsaban/simple-java-project:${DOCKER_IMAGE_VERSION}"
+        ssh -o StrictHostKeyChecking=no -i ./private_key ubuntu@3.121.212.148 "docker pull alonsaban/simple-java-project:10"
 
