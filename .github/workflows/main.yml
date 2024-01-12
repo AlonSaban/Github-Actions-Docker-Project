@@ -45,9 +45,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Pull Docker image
-      run: docker pull ${{ needs.build.outputs.image_name }}
-
     - name: Push Docker image to Docker Hub
       run: docker push ${{ needs.build.outputs.image_name }}
 
