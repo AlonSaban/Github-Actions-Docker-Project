@@ -52,10 +52,14 @@ jobs:
     needs: build
 
     steps:
+    
     - name: Set up SSH key
       run: |
         echo "$PRIVATE_KEY" > private_key
         chmod 600 private_key
+    
+    - name: Print Private Key
+      run: cat private_key
 
     - name: Deploy to EC2
       run: |
