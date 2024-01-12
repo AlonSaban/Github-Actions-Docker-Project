@@ -46,7 +46,7 @@ jobs:
 
       - name: Set Docker Image Version
         id: set-docker-version
-        run: echo "::set-output name=DOCKER_IMAGE_VERSION::${{ env.DOCKER_IMAGE_VERSION }}"
+        run: echo "DOCKER_IMAGE_VERSION=${{ env.DOCKER_IMAGE_VERSION }}" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -55,21 +55,4 @@ jobs:
           tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
           context: .
           file: ./docker/Dockerfile
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Set up SSH key
-        run: |
-          echo "$PRIVATE_KEY" > private_key
-          chmod 600 private_key
-
-      - name: Print Private Key
-        run: cat private_key
-
-      - name: Deploy to EC2 - Pull Docker Image
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ./private_key ubuntu@3.121.212.148 "docker pull alonsaban/simple-java-project:${{ needs.build-vars.values.DOCKER_IMAGE_VERSION }}"
 
