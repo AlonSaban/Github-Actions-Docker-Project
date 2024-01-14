@@ -59,9 +59,6 @@ jobs:
         echo "$PRIVATE_KEY" > private_key
         chmod 600 private_key
     
-    - name: Print Private Key
-      run: cat private_key
-
     - name: Deploy to EC2 - Connect to Instance
       run: |
         ssh -o StrictHostKeyChecking=no -i ./private_key ubuntu@3.121.212.148 "echo 'Connected to EC2 Instance'"
