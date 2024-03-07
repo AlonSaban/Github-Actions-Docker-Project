@@ -12,6 +12,7 @@ env:
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
@@ -47,6 +48,27 @@ jobs:
         tags: alonsaban/simple-java-project:${{ env.DOCKER_IMAGE_VERSION }}
         context: .
         file: ./docker/Dockerfile
+
+  # New step for dependency scanning
+  dependency-scan:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install OWASP Dependency-Check
+        run: |
+          wget https://dl.bintray.com/jeremy-long/owasp/dependency-check-6.0.3-release.zip
+          unzip dependency-check-6.0.3-release.zip
+          cd dependency-check/bin
+
+      - name: Run OWASP Dependency-Check
+        run: |
+          ./dependency-check.sh --scan <path_to_your_project> --format HTML --project "Your Project Name" --out dependency-check-report.html
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   
   deploy:
     runs-on: ubuntu-latest
